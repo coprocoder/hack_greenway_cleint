@@ -1,0 +1,163 @@
+.helpMap-view {
+    position: relative;
+    height: 100%;
+    .map-overlay {
+        height: 100%;
+        position: relative;
+        .map-container {
+            height: 100%;
+        }
+        .map-route-info {
+            visibility: visible;
+            width: 100px;
+            position: absolute;
+            left: calc(50% - 50px);
+            top: 0;
+            display: flex;
+            flex-flow: wrap;
+            justify-content: center;
+            z-index: 1;
+
+            justify-content: center;
+            background: lightgrey;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 0 0 10px 10px;
+            padding: 3px;
+        }
+        #map-coordinates {
+            position: absolute;
+            bottom: 20px;
+            right: 0;
+            z-index: 1;
+        }
+        .sidebar {
+            background-color: rgba(35, 55, 75, 0.9);
+            color: #fff;
+            padding: 6px 12px;
+            font-family: monospace;
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 12px;
+            border-radius: 4px;
+        }
+    }
+
+    .helpMap-geocoder {
+        position: absolute;
+        top: 10%;
+        left: 5%;
+        background-color: lightgray;
+        box-shadow: 0px 0px 20px 0px rgba(34, 60, 80, 0.3);
+        border-radius: 10px;
+
+        .helpMap-geocoder-visible {
+            .helpMap-geocoder-header {
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                button {
+                    position: absolute;
+                    left: 0;          
+                    padding: 5px 10px;
+                    height: 30px;
+                    background-color: inherit;
+                    color: black;      
+                }
+                label {
+
+                }
+            }
+            .helpMap-geocoder-form {
+                display: flex;
+                flex-flow: column;
+                border-radius: 5px;
+                min-width: 250px;
+                max-width: 300px;
+                padding: 10px;
+                .helpMap-geocoder-field {
+                    border-radius: 5px;
+                    outline: none;
+                    border: none;
+                    margin: 10px 0;
+                    font-size: 1.1em;
+                    padding: 5px;
+                }
+            }
+        }
+        .helpMap-geocoder-hidden {
+            button {
+                padding: 5px 10px;
+                color: black;
+                background-color: cadetblue;
+            }
+            
+        }
+
+    }
+
+    .helpMap-navigator {
+        position: absolute;
+        top: 60%;
+        left: 5%;
+        background-color: lightgray;
+        box-shadow: 0px 0px 20px 0px rgba(34, 60, 80, 0.3);
+        border-radius: 10px;
+        
+
+        .helpMap-navigator-visible {
+            height: 200px;
+            width: 350px;
+            .helpMap-navigator-header {
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                button {
+                    position: absolute;
+                    left: 0;          
+                    padding: 5px 10px;
+                    height: 30px;
+                    background-color: inherit;
+                    color: black;      
+                }
+                label {
+
+                }
+            }
+            .helpMap-navigator-listWrapper {
+                display: flex;
+                height: calc(100% - 30px);
+                .helpMap-navigator-list {
+                    overflow: overlay;
+                    list-style: none;
+                    padding: 0 10px;
+
+                    .helpMap-navigatorItem{
+                        display: flex;
+                        justify-content: space-between;
+                        border-top: 1px solid lightslategrey;
+                        .helpMap-navigatorItem-text {
+
+                        }
+                        .helpMap-navigatorItem-info {
+
+                        }
+                    }
+                }
+            }
+        }
+        .helpMap-navigator-hidden {
+            button {
+                padding: 5px 10px;
+                color: black;
+                background-color: cadetblue;
+            }
+            
+        }
+
+    }
+}

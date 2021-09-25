@@ -1,0 +1,45 @@
+$BlueAccent: #cde7ff;
+$BlueDarkAccent: #9ed0ff;
+
+.dialog-view.listSelectVertical {
+    height: calc(100% - 40px);
+    max-height: 80vh;
+
+    .dialog-content {
+        height: calc(100% - 50px);
+        overflow-x: hidden;
+
+        .dialog-title {
+            width: 100%;
+            font-size: 1.1em;
+            cursor: default;
+            font-weight: bold;
+            text-align: center;
+            background-color: inherit;
+            border: none;
+            height: 20px;
+            outline: none;
+        } 
+
+        h4 {
+            font-size: 1.1em;
+            margin: 1em 0;
+        }
+
+        button {
+            width: 100%;
+            height: 30px;
+            margin-bottom: 5px;
+            &:hover {
+                color: black;
+                background-color: $BlueDarkAccent;
+            }
+        }
+
+        .dialog-select-addBtn {
+            margin-top: 30px;
+            background-color: darkolivegreen;
+        }
+    }
+}    
+

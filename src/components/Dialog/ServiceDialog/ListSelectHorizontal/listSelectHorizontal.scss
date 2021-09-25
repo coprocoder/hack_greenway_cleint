@@ -1,0 +1,28 @@
+$BlueLightAccent: #8bc7ff;
+$BlueAccent: #54a1e9;
+$BlueDarkAccent: #1c8af0;
+
+.dialog-content-aggregateList {    
+    // margin-bottom: 20px;
+    .dialog-aggregateList {
+        display: flex;
+        flex-flow: row;
+        &>label {
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            
+            &:hover { 
+                color: white;
+                background-color:  $BlueLightAccent;
+            }
+        }
+        .active {
+            color: white;
+            background-color:  $BlueAccent;
+        }
+    }
+}

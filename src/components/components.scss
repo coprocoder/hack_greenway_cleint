@@ -1,0 +1,19 @@
+$BlueAccent: #cde7ff;
+$BlueDarkAccent: #9ed0ff;
+
+.section {
+    width: 90%;
+    margin: auto;
+    text-align: justify;
+
+    .section__title {
+        text-align: center;
+    }
+    .section__text {
+        max-width: max-content;
+        margin: auto;
+    }
+    .section__content {
+        margin: auto;
+    }
+}

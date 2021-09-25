@@ -1,0 +1,186 @@
+$LightBlueAccent: #cde7ff;
+$LightBlueDarkAccent: #90CAF9;
+$BlueAccent: #54a1e9;
+$BlueDarkAccent: #0180EA;
+$GrayAccent: #F2F1F6;
+$GrayDarkAccent: #949494;
+
+.home-view {
+    display: flex; 
+    flex-flow: column;   
+    min-height: 100vh;
+    max-width: 100vw;
+
+    .home-navigation {
+        display: block;
+        position: fixed;
+        // background-color: white;
+        background: linear-gradient(
+            0deg
+            , rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%);
+        min-width: 200px;
+        height: 42px;
+        width: 100%;
+        z-index: 10;
+
+        .home-navigation-list {
+            display: flex;
+            float: right;
+            padding: 0 10px;
+            .home-navigation-item {
+                // background-color: $GrayAccent;
+                // border-radius: 50px;
+                cursor: pointer;
+                a {
+                    display: inline-block;
+                    display: -webkit-box; /* !хак! для Android 4.3-, должен идти после inline-block */
+                    text-decoration: none;
+                    text-decoration-line: none;
+                    -webkit-box-align: center;
+                    -webkit-box-pack: center;
+                    padding: 10px 10px;
+                    color: $BlueDarkAccent;
+                    cursor: pointer;
+                }
+                &:hover{
+                    // background-color: $LightBlueDarkAccent;
+                    text-decoration: underline;
+                }
+                label {
+                    font-size: initial;
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+    
+    .home-content {
+        display: block;            
+        .home-download {
+            display: flex;
+            flex-flow: wrap;
+            align-items: center;
+            justify-content: space-around;
+            margin-top: 40px;
+            background: $GrayAccent;
+            height: calc(100vh - 42px);
+            grid-row-gap: 30px;
+            align-content: center;
+        
+            .home-download-overlay {
+                max-width: 600px;
+                // width: 50%;
+                position: relative;
+                .home-download-center {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    .home-download-content {
+                        width: 220px;
+                        position: relative;
+                        &>h4{
+                            color: $BlueDarkAccent;
+                            font-size: 2em;
+                            text-align: center;
+                        }
+                        .home-download-mainPlatformBtn{  
+                            // position: absolute;  
+                            display: grid;
+                            grid-template-columns: 85% 15%;
+                            height: 50px;
+                            width: 100%;
+                            z-index: 1;
+                            filter: drop-shadow(0 0 1px black);
+
+                            .home-download-linkWebBtn {
+                                border-radius: 8px 0 0 8px;
+                                font-size: 1.2em;
+                                height: 100%;
+                                width: 100%;
+                            }
+                            .home-download-otherPatformsBtn {
+                                min-width: 0px;
+                                font-size: 0.8em;
+                                border-radius: 0 8px 8px 0;
+                                // border-left: solid 1px;
+                                margin-left: 4px;
+                            }
+                        }
+                        .home-download-otherPatforms{
+                            // position: absolute;
+                            display: block;
+                            width: 220px;
+                            height: min-content;
+                            border-radius: 10px;
+                            padding-top: 52px;
+                            background-color: transparent;
+                            margin-top: -52px;
+                            transition: background-color .2s, padding-top .2s;
+                            &.active{
+                                background-color: white;
+                                padding-top: 62px;
+                            }
+                            .home-download-otherPlatformItem{
+                                height: 0px;
+                                transition: height 0.2s ease-out;
+                                a{
+                                    height: 100%;
+                                    display: block;
+                                    padding: 0px;
+                                    overflow: hidden;
+                                    button {
+                                        width: calc(100% - 20px);
+                                        height: calc(100% - 10px);
+                                        margin-bottom: 10px;
+                                        margin-left: 10px;
+                                        overflow: hidden;
+                                    }
+                                }
+                                &.active{
+                                    transition: height 0.2s ease-in;
+                                    height: 50px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .home-download-image {
+                width: 50%;
+                min-width: 300px;
+                max-width: 850px;
+                padding: 4% 2px 0px 2px;
+                align-self: center;
+                height: min-content;
+                img {
+                    width: inherit;
+                    box-shadow: 0px 0px 2px 0px rgba(34, 60, 80, 0.35);
+                    border-radius: 0 0 10px 10px;
+                }
+            }
+        }
+
+        .home-helpMap-wrapper {
+            height: calc(100vh - 42px);
+        }
+
+        .home-mobile-wrapper {
+            // height: calc(100vh - 42px);
+            height: 100vh;
+            display: flex;
+        }
+        
+
+    }
+
+}
+
+@media screen and (max-width: 600px) {
+    .home-navigation {
+        display: none;
+    }
+    .home-content {
+        width: 100%;
+    }
+}

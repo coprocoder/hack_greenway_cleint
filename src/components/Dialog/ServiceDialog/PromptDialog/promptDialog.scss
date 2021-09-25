@@ -1,0 +1,39 @@
+$BlueAccent: #cde7ff;
+$BlueDarkAccent: #9ed0ff;
+
+.dialog-view.listSelectVertical {
+    height: calc(100% - 40px);
+    max-height: 80vh;
+
+    .dialog-content {
+        height: calc(100% - 50px);
+        overflow-x: hidden;
+
+        .dialog-content-input {
+            padding: 8px 8px;
+            border-radius: 6px;
+            border: 1px solid #80808045;
+            font-size: 1.1em;
+            font-family: system-ui;
+            width: calc(100% - 16px);
+            box-shadow: 0 0 10px #00000045;
+            outline: none;
+        }
+        .dialog-content-submitBtn {
+            margin-top: 20px;
+            width: 100%;
+            height: 30px;
+            margin-bottom: 5px;
+            &:hover {
+                color: black;
+                background-color: $BlueDarkAccent;
+            }
+        }
+
+        h4 {
+            font-size: 1.1em;
+            margin: 1em 0;
+        }
+    }
+}    
+
