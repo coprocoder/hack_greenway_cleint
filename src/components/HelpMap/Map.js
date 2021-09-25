@@ -91,7 +91,7 @@ class Map extends React.PureComponent {
 
     componentDidUpdate(props, old) {
 
-        console.log('======map update', this.props, props)
+        // console.log('======map update props', this.props, props)
         this.props.onUpdateMap(this.state)
         this.map.getSource('route_path')
             &&this.map.getSource('route_path').setData(this.props.route_geoJson?this.props.route_geoJson.route : { "type": "FeatureCollection", "features": [] })

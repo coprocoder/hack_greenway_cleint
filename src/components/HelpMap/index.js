@@ -125,7 +125,7 @@ class MapGeocoder extends Component {
     componentDidMount(){
         // GetCategories()
         //     .then(resp => this.setState({categories: resp.data}))
-        
+
         let categories = [
             {id: 0, name: "foot", icon: faShoePrints},
             {id: 1, name: "bike", icon: faBicycle},
@@ -223,7 +223,7 @@ class MapGeocoder extends Component {
     }
 
     render(){
-        // console.log('geocoder addrList', this.state.addrList)
+        console.log('geocoder state', this.state)
         // alert(this.state.addrList)
 
         let categories = this.state.categories.map((item) => {
@@ -252,22 +252,28 @@ class MapGeocoder extends Component {
                             <label>Поиск мест</label>
                         </div>
                         <form className="helpMap-geocoder-form" onSubmit={(e) => this.handleSubmit(e)}>             
-                            <AsyncSelect
-                                cacheOptions
-                                defaultOptions
-                                loadOptions={this.getSelectAddrList}
-                                onInputChange={this.getSelectAddrList}
-                                onChange={item => this.setState({selectedAddrBegin: item})}
-                                isClearable
-                            />
-                            <AsyncSelect
-                                cacheOptions
-                                defaultOptions
-                                loadOptions={this.getSelectAddrList}
-                                onInputChange={this.getSelectAddrList}
-                                onChange={item => this.setState({selectedAddrEnd: item})}
-                                isClearable
-                            />
+                            <div className="helpMap-geocoder-inputWrapper">
+                                <div className="helpMap-geocoder-inputColor" style={{backgroundColor: this.state.selectedAddrBegin ? "red" : "transparent"}} />
+                                <AsyncSelect
+                                    cacheOptions
+                                    defaultOptions
+                                    loadOptions={this.getSelectAddrList}
+                                    onInputChange={this.getSelectAddrList}
+                                    onChange={item => this.setState({selectedAddrBegin: item})}
+                                    isClearable
+                                />
+                            </div>
+                            <div className="helpMap-geocoder-inputWrapper">
+                                <div className="helpMap-geocoder-inputColor" style={{backgroundColor: this.state.selectedAddrEnd ? "blue" : "transparent"}}/>
+                                <AsyncSelect
+                                    cacheOptions
+                                    defaultOptions
+                                    loadOptions={this.getSelectAddrList}
+                                    onInputChange={this.getSelectAddrList}
+                                    onChange={item => this.setState({selectedAddrEnd: item})}
+                                    isClearable
+                                />
+                            </div>
                             {/* <AsyncSelect
                                 cacheOptions
                                 defaultOptions

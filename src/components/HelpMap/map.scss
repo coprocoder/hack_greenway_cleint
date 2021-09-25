@@ -88,6 +88,39 @@
                 &>*{
                     margin-top: 8px;
                 }
+                .helpMap-geocoder-inputWrapper{
+                    display: flex;
+                    align-items: center;
+                    position: relative;
+                    .helpMap-geocoder-inputColor  {
+                        height: 10px;
+                        width: 10px;
+                        border-radius: 50%;
+                        position: absolute;
+                        left: 10px;
+                        z-index: 1;
+                    }
+                    .helpMap-geocoder-inputStartColor {
+                        background-color: red;
+                    }
+                    .helpMap-geocoder-inputEndColor {
+                        background-color: blue;
+                    }
+                    &>:nth-child(2) {
+                        width: 100%;
+                        &>:nth-child(2) {
+                            padding-left: 15px;
+                        }
+                    }
+                    &:focus(){
+                        .helpMap-geocoder-inputStartColor {
+                            background-color: transparent;
+                        }
+                        .helpMap-geocoder-inputEndColor {
+                            background-color: transparent;
+                        }
+                    }
+                }
                 .category-selector{
                     display: flex;
                     border-radius: 8px;
