@@ -6,20 +6,24 @@
         position: relative;
         .map-container {
             height: 100%;
+            position: absolute;
+            top:0;
+            width: 100%;
         }
         .map-route-info {
             visibility: visible;
             width: 100px;
-            position: absolute;
+            position: sticky;
+            z-index: 11;
             left: calc(50% - 50px);
             top: 0;
             display: flex;
             flex-flow: wrap;
             justify-content: center;
-            z-index: 1;
 
             justify-content: center;
-            background: lightgrey;
+            background: #0180EA;
+            color: white;
             font-size: 1.1em;
             font-weight: 600;
             border-radius: 0 0 10px 10px;
@@ -32,8 +36,8 @@
             z-index: 1;
         }
         .sidebar {
-            background-color: rgba(35, 55, 75, 0.9);
-            color: #fff;
+            background-color: white;
+            color: gray;
             padding: 6px 12px;
             font-family: monospace;
             z-index: 1;
@@ -41,15 +45,17 @@
             top: 0;
             left: 0;
             margin: 12px;
-            border-radius: 4px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 20px 0px rgba(34, 60, 80, .3);
         }
     }
 
     .helpMap-geocoder {
         position: absolute;
         top: 10%;
-        left: 5%;
-        background-color: lightgray;
+        left: 12px;
+        background-color: white;
+        padding: 8px;
         box-shadow: 0px 0px 20px 0px rgba(34, 60, 80, 0.3);
         border-radius: 10px;
 
@@ -57,11 +63,12 @@
             .helpMap-geocoder-header {
                 height: 30px;
                 display: flex;
+                font-weight: bold;
                 align-items: center;
                 justify-content: center;
                 button {
                     position: absolute;
-                    left: 0;          
+                    left: 8px;          
                     padding: 5px 10px;
                     height: 30px;
                     background-color: inherit;
@@ -78,13 +85,42 @@
                 min-width: 250px;
                 max-width: 300px;
                 padding: 10px;
+                &>*{
+                    margin-top: 8px;
+                }
+                .category-selector{
+                    display: flex;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    border-color: lightgray;
+                    border-width: 1px;
+                    border-style: solid;
+                    &>*{
+                        flex: 1;
+                        width: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 8px;
+                        cursor: pointer;
+                        &>*{
+                            margin: 0 8px;
+                        }
+                        &.active{
+                            background-color: #0180EA;
+                            color: white;
+                        }
+                    }
+                }
                 .helpMap-geocoder-field {
                     border-radius: 5px;
                     outline: none;
+                    background-color: #0180EA;
+                    color: white;
                     border: none;
                     margin: 10px 0;
                     font-size: 1.1em;
-                    padding: 5px;
+                    padding: 8px;
                 }
             }
         }
@@ -101,9 +137,10 @@
 
     .helpMap-navigator {
         position: absolute;
-        top: 60%;
-        left: 5%;
-        background-color: lightgray;
+        bottom: 30px;
+        left: 12px;
+        background-color: white;
+        padding: 12px;
         box-shadow: 0px 0px 20px 0px rgba(34, 60, 80, 0.3);
         border-radius: 10px;
         
@@ -114,11 +151,12 @@
             .helpMap-navigator-header {
                 height: 30px;
                 display: flex;
+                font-weight: bold;
                 align-items: center;
                 justify-content: center;
                 button {
                     position: absolute;
-                    left: 0;          
+                    left: 8px;          
                     padding: 5px 10px;
                     height: 30px;
                     background-color: inherit;
@@ -139,7 +177,8 @@
                     .helpMap-navigatorItem{
                         display: flex;
                         justify-content: space-between;
-                        border-top: 1px solid lightslategrey;
+                        border-top: 1px solid lightgray;
+                        padding: 8px 0;
                         .helpMap-navigatorItem-text {
 
                         }

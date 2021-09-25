@@ -35,7 +35,7 @@ class Home extends Component {
 
   componentDidMount() {
     document.title = "Главная"
-    console.log('Home props', this.props, document.documentElement.scrollHeight)
+    // console.log('Home props', this.props, document.documentElement.scrollHeight)
     window.addEventListener('scroll', this.listenToScroll)
   }
 
@@ -132,7 +132,7 @@ class HomePlatformSelector extends Component {
             </div>
           </div>
         </div>
-        <div className='home-download-image' style={{background: "url(" + BrowserBorder + ")" + "round"}}>
+        <div className='home-download-image' style={{background: "url(" + BrowserBorder + ")" + "round", backgroundOrigin: 'border-box'}}>
           <ImgSlider img_class="mobile_app_img" data={screen_data}/>
         </div>
       </div>

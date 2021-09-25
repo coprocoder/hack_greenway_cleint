@@ -5,13 +5,13 @@ $DarkBlueAccent: #0180EA;
 .scrollToTopButton {
     position: fixed;
     bottom: 30px;
-    right: 30px;
+    right: 8px;
     z-index: 10;
 
     button{
-        padding: 10px;
-        color: black;
-        background-color: $BlueAccent;
+        padding: 10px 16px;
+        color: white;
+        background-color: #0180EA;
         box-shadow: 0px 0px 5px 0px rgba(34, 60, 80, 0.35);
 
         // &:hover{

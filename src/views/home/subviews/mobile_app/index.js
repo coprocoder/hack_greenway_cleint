@@ -20,6 +20,7 @@ import ScreenImg1    from '../../../../images/mobile_app/screen/1.png'
 import ScreenImg2    from '../../../../images/mobile_app/screen/2.png'
 import ScreenImg3    from '../../../../images/mobile_app/screen/3.png'
 import ScreenImg4    from '../../../../images/mobile_app/screen/4.png'
+import QR    from '../../../../images/mobile_app/screen/qr.png'
 // import ScreenImg5    from '../../../../images/mobile_app/screen/5.png'
 // import ScreenImg6    from '../../../../images/mobile_app/screen/6.png'
 // import ScreenImg7    from '../../../../images/mobile_app/screen/7.png'
@@ -84,10 +85,15 @@ class MobileApp extends Component {
                       </div>
                     ))}
               </div>
-              {this.state.mobile_imgs}
+              <div className="snack">
+                <img src={QR}/>
+                <p>You can download <a href="https://expo.dev/client" target="_blank">Expo Go</a> and scan the QR code to try 
+                <a href="https://snack.expo.dev/@n.zaycev/amused-candy" target="_blank"> Demo</a>.</p>
+              </div>
+              {/* {this.state.mobile_imgs} */}
           </div>
 
-          {/* Кнопки со ссылками на маркеты */}
+          {/* Кнопки со ссылками на маркеты
           <div className="home-mobile-store">
             <a href={apple_link} target="_blank" rel="noreferrer" >
               <img className='home-mobile-store-icon' src={AppleStoreImg} alt=''/>
@@ -95,7 +101,7 @@ class MobileApp extends Component {
             <a href={google_link} target="_blank" rel="noreferrer" >
               <img className='home-mobile-store-icon' src={GoogleStoreImg} alt=''/>
             </a>
-          </div>
+          </div> */}
 
           {/* Ссылка на пользовательское соглашение под разделительной полоской */}
           {/* <div className="home-mobile-line">

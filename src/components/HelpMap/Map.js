@@ -22,7 +22,8 @@ class Map extends React.PureComponent {
         const { lng, lat, zoom } = this.state;
         this.map = new mapboxgl.Map({
             container: this.mapContainer.current,
-            style: 'mapbox://styles/nzaycev/cksl9h0iu09fy18pg7yeljl4q',
+            // style: 'mapbox://styles/nzaycev/cksl9h0iu09fy18pg7yeljl4q',
+            style: 'mapbox://styles/nzaycev/cku013wd22hdk17mof1lwol42',
             center: [lng, lat],
             zoom: zoom,
             maxBounds: [
@@ -88,13 +89,35 @@ class Map extends React.PureComponent {
         })
     }
 
-    componentDidUpdate() {
-        // console.log('map update', this.props)
+    componentDidUpdate(props, old) {
+
+        console.log('======map update', this.props, props)
         this.props.onUpdateMap(this.state)
+        this.map.getSource('route_path')
+            &&this.map.getSource('route_path').setData(this.props.route_geoJson?this.props.route_geoJson.route : { "type": "FeatureCollection", "features": [] })
         if(this.props.route_geoJson) {
-            this.map.getSource('route_path').setData(this.props.route_geoJson.route)
+            let route = this.props.route_geoJson.route
+            
+
+            let path_len = route.features[0].geometry.coordinates.length
+            let start = route.features[0].geometry.coordinates[0]
+            let end = route.features[0].geometry.coordinates[path_len - 1]
+            console.log('beg end', start, end)
+            
+            // const marker_start = new mapboxgl.Marker({
+            //     color: "#green",
+            //     draggable: false
+            //     }).setLngLat(start)
+            //     .addTo(this.map);
+
+            // const marker_end = new mapboxgl.Marker({
+            //     color: "#red",
+            //     draggable: false
+            //     }).setLngLat(end)
+            //     .addTo(this.map);
         }
     }
+
 
     addSources(){
         // console.log('addSources', this.map)
@@ -250,13 +273,14 @@ class Map extends React.PureComponent {
         return (
             <div className="map-overlay">
                 {/* <div id="map-coordinates" /> */}
-                <div className="sidebar">Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}</div>
                 {this.props.route_geoJson ? 
                     <div className="map-route-info">
                         <div>{(this.props.route_geoJson.distance/1000).toFixed(2)} км.</div>
                         <div>{(this.props.route_geoJson.time/1000/60).toFixed(2)} мин.</div>
                     </div>
                 : null}
+                <div className="sidebar">Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}</div>
+                
 
                 <div ref={this.mapContainer} className="map-container" />
             </div>

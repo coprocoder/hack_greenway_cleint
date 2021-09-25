@@ -147,12 +147,16 @@ $GrayDarkAccent: #949494;
                 }
             }
             .home-download-image {
+                
                 width: 50%;
                 min-width: 300px;
                 max-width: 850px;
                 padding: 4% 2px 0px 2px;
                 align-self: center;
                 height: min-content;
+                border: 2px solid #f2f1f6;
+                border-radius: 12px;
+                background-origin: border-box;
                 img {
                     width: inherit;
                     box-shadow: 0px 0px 2px 0px rgba(34, 60, 80, 0.35);

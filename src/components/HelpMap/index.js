@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom'
 
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExpandAlt, faCompressAlt } from '@fortawesome/free-solid-svg-icons'
+import { faExpandAlt, faCompressAlt, faShoePrints, faBicycle } from '@fortawesome/free-solid-svg-icons'
 
 import Map from './Map'
 import { 
@@ -21,6 +21,7 @@ import {
 
 
 import './map.scss'
+import mapboxgl from 'mapbox-gl';
 
 class HelpMap extends Component {
     constructor(props){
@@ -40,6 +41,10 @@ class HelpMap extends Component {
     }
 
     setRoute = (data) => {
+        console.log({route: data})
+        // this.Map.fitBounds(data)
+        if (data)
+            this.Map.fitBounds([this.state.selectedAddrBegin.point, this.state.selectedAddrEnd.point], {padding: 100})
         this.setState({ route: data })
     }
     changeCat = (cat) => {
@@ -51,10 +56,36 @@ class HelpMap extends Component {
     }
 
     setMapOpt = (opt) => {
-        console.log('mapOpt', opt)
+        // console.log('mapOpt', opt)
         this.setState({
             mapOpt: opt
         })
+    }
+
+    componentDidUpdate(){
+        this.Map._markers.forEach(i => i.remove())
+        if (this.state.selectedAddrBegin)
+            new mapboxgl.Marker({color: 'red'}).setLngLat(this.state.selectedAddrBegin.point).addTo(this.Map)
+        if (this.state.selectedAddrEnd)
+            new mapboxgl.Marker({color: 'blue'}).setLngLat(this.state.selectedAddrEnd.point).addTo(this.Map)
+        
+    }
+
+    onChangeStartPoint = (selectedAddrBegin) => {
+        if (selectedAddrBegin&&this.Map)
+        {
+            this.Map.flyTo({center: selectedAddrBegin.point, zoom: 12})
+        }
+        !selectedAddrBegin&&this.setState({route: null})
+        this.setState({selectedAddrBegin})
+    }
+    onChangeFinishPoint = (selectedAddrEnd) => {
+        this.Map._markers.forEach(i => i.remove())
+        if (selectedAddrEnd&&this.Map){
+            this.Map.flyTo({center: selectedAddrEnd.point, zoom: 12})
+        }
+        !selectedAddrEnd&&this.setState({route: null})
+        this.setState({selectedAddrEnd})
     }
 
     render(){
@@ -62,14 +93,19 @@ class HelpMap extends Component {
         return(
             <div className="helpMap-view">
                 <Map 
+                    ref = {c => this.Map = c&&c.map}
                     points_geoJson = {this.state.points}
                     route_geoJson = {this.state.route}
+                    startMarker = {this.state.selectedAddrBegin}
+                    stopMarker = {this.state.selectedAddrEnd}
                     onUpdateMap = {this.setMapOpt}
                 />
                 <MapGeocoder 
                     changeCat={this.changeCat}
                     setRoute={this.setRoute}
                     mapOpt = {this.state.mapOpt}
+                    onChangeStartPoint = {this.onChangeStartPoint}
+                    onChangeFinishPoint = {this.onChangeFinishPoint}
                 />
                 {this.state.route ? <MapNavigator path={this.state.route.instructions}/> : null}
             </div>
@@ -89,14 +125,19 @@ class MapGeocoder extends Component {
     componentDidMount(){
         // GetCategories()
         //     .then(resp => this.setState({categories: resp.data}))
-
+        
         let categories = [
-            {id: 0, name: "foot"},
-            {id: 1, name: "bike"},
+            {id: 0, name: "foot", icon: faShoePrints},
+            {id: 1, name: "bike", icon: faBicycle},
         ]
-        this.setState({categories: categories})
+        this.setState({categories: categories, category: categories[0].name})
     }
-    componentDidUpdate(){
+    componentDidUpdate(props, old){
+        if (old.selectedAddrBegin != this.state.selectedAddrBegin)
+            this.props.onChangeStartPoint(this.state.selectedAddrBegin)
+        if (old.selectedAddrEnd != this.state.selectedAddrEnd)
+            this.props.onChangeFinishPoint(this.state.selectedAddrEnd)
+        // this.props.onChange(this.state)
         // console.log('geocoder addrList', this.state.addrList)
         // console.log('state', this.state)
     }
@@ -186,9 +227,12 @@ class MapGeocoder extends Component {
         // alert(this.state.addrList)
 
         let categories = this.state.categories.map((item) => {
-            return <label key={item.id}>
+            return <label key={item.id} className={this.state.category == item.name ? 'active' : ''}>
+                        <FontAwesomeIcon icon={item.icon}/>
                         <input 
                             name="category" type="radio" 
+                            style={{display: 'none'}}
+                            {...this.state.category == item.name ? {checked: true} : {}}
                             value={item.name} onChange={e => this.selectCategory(e)}
                         />
                         {item.name}
@@ -205,7 +249,7 @@ class MapGeocoder extends Component {
                     <div className="helpMap-geocoder-visible">
                         <div className="helpMap-geocoder-header">
                             <button onClick={this.toggleViewMode}><FontAwesomeIcon icon={faCompressAlt} /></button>
-                            <label>Геокодер</label>
+                            <label>Поиск мест</label>
                         </div>
                         <form className="helpMap-geocoder-form" onSubmit={(e) => this.handleSubmit(e)}>             
                             <AsyncSelect
@@ -232,7 +276,9 @@ class MapGeocoder extends Component {
                                 // onChange={item => this.setState({selectedAddrEnd: item})}
                                 isClearable
                             /> */}
-                            {categories}
+                            <div className="category-selector">
+                                {categories}
+                            </div>
                             <input type="submit" 
                                 className="helpMap-geocoder-field" 
                                 value="Построить машрут"
@@ -259,7 +305,7 @@ class MapNavigator extends Component {
     }
 
     render(){
-        console.log('MapNavigator render props', this.props.path)
+        // console.log('MapNavigator render props', this.props.path)
         return(
             <div className="helpMap-navigator">
                 { this.state.hidden ? 

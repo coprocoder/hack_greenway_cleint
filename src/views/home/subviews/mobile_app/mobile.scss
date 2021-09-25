@@ -4,7 +4,14 @@ $BlueDarkAccent: #9ed0ff;
 
 .home-mobile {
     margin: auto;
-
+    .snack{
+        img{
+            transform: scale(0.7);
+        }
+        p{
+            text-align: center;
+        }
+    }
     .home-mobile-content {
         position: relative;
         display: grid;
