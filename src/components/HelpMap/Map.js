@@ -89,14 +89,15 @@ class Map extends React.PureComponent {
     }
 
     componentDidUpdate() {
-        console.log('map update', this.props)
+        // console.log('map update', this.props)
+        this.props.onUpdateMap(this.state)
         if(this.props.route_geoJson) {
             this.map.getSource('route_path').setData(this.props.route_geoJson.route)
         }
     }
 
     addSources(){
-        console.log('addSources', this.map)
+        // console.log('addSources', this.map)
         // Датчики на карте
         this.map.addSource('detector_points', {
             type: 'geojson',
@@ -113,7 +114,7 @@ class Map extends React.PureComponent {
         return this.map
     }
     addRouteLayer(){
-        console.log('addRouteLayer', this.map)
+        // console.log('addRouteLayer', this.map)
         this.map.addLayer({
             id: 'route_path',
             type: 'line',
@@ -126,7 +127,7 @@ class Map extends React.PureComponent {
         })
     }
     addDetectorLayer(){
-        console.log('addDetectorLayer', this.map)
+        // console.log('addDetectorLayer', this.map)
         this.map.addLayer({
             id: 'detector_points',
             type: 'circle',
@@ -146,7 +147,7 @@ class Map extends React.PureComponent {
         })
     }
     addHeatMapLayer(){
-        console.log('addHeatMapLayer', this.map)
+        // console.log('addHeatMapLayer', this.map)
         this.map.addLayer({
             'id': 'detector_heat',
             'type': 'heatmap',

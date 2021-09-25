@@ -50,11 +50,10 @@ class HelpMap extends Component {
             })
     }
 
-    setMapOpt(lng, lat, zoom){
+    setMapOpt = (opt) => {
+        console.log('mapOpt', opt)
         this.setState({
-            lng: lng,
-            lat: lat,
-            zoom: zoom
+            mapOpt: opt
         })
     }
 
@@ -65,13 +64,12 @@ class HelpMap extends Component {
                 <Map 
                     points_geoJson = {this.state.points}
                     route_geoJson = {this.state.route}
-                    // charts = {this.state.charts}
-                    // setMapOpt = {this.setMapOpt}
+                    onUpdateMap = {this.setMapOpt}
                 />
                 <MapGeocoder 
                     changeCat={this.changeCat}
                     setRoute={this.setRoute}
-                    // mapOpt = {this.state}
+                    mapOpt = {this.state.mapOpt}
                 />
                 {this.state.route ? <MapNavigator path={this.state.route.instructions}/> : null}
             </div>
@@ -146,31 +144,32 @@ class MapGeocoder extends Component {
     }
 
     getSelectAddrList = (value) => {
-        // console.log('getSelectAddrList', value)
-        return new Promise((resolve, reject) => GetGeocoderData(value, this.props.mapOpt)
-            .then(resp => {
-                // console.log('geodata', resp)
-                let items = []
-                resp.data.hits.map( (res, i) => { 
-                    // if(res.city == "Moscow" || res.city == "Москва") {
-                        let text = ''
-                        // text = res.postcode ? text + res.postcode + ', ' : text
-                        // text = res.state ? text + res.state + ', ' : text
-                        text = res.city ? text + res.city + ', ' : text 
-                        text = res.street ? text + res.street + ', ' : text 
-                        text = res.house_number ? text + res.house_number + ', ' : text 
-                        // text = res.housenumber ? text + res.housenumber  : text 
-                        text = res.name ? text + res.name : text 
-                        // console.log('item text', text)
-                        
-                        items.push(Object.assign({}, res, { id: i, value: text, label: text }))
-                        // console.log('items', items)
-                    // }
+        if(!!this.props.mapOpt)
+            return new Promise((resolve, reject) => GetGeocoderData(value, this.props.mapOpt)
+                .then(resp => {
+                    console.log('geodata', resp)
+                    let items = []
+                    resp.data.hits.map( (res, i) => { 
+                        // if(res.city == "Moscow" || res.city == "Москва") {
+                            let text = ''
+                            // text = res.postcode ? text + res.postcode + ', ' : text
+                            // text = res.state ? text + res.state + ', ' : text
+                            // text = res.city ? text + res.city + ', ' : text 
+                            text = res.street ? text + res.street + ', ' : text 
+                            text = res.house_number ? text + res.house_number + ', ' : text 
+                            // text = res.housenumber ? text + res.housenumber  : text 
+                            text = res.name ? text + res.name : text 
+                            // console.log('item text', text)
+                            
+                            items.push(Object.assign({}, res, { id: i, value: text, label: text }))
+                            // items.push(Object.assign({}, { id: i, value: text, label: text }, res))
+                            // console.log('items', items)
+                        // }
+                    })
+                    this.setState({ addrList: items })
+                    resolve(items)
                 })
-                this.setState({ addrList: items })
-                resolve(items)
-            })
-        )
+            )
     }
 
     selectCategory(e){
