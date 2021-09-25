@@ -132,9 +132,9 @@ class Map extends React.PureComponent {
         if(this.props.route_geoJson) {
             this.map.getSource('route_path').setData(this.props.route_geoJson.route)
         }
-        if(!!this.props.points_geoJson.features[0].properties.is_accepted) {
-            this.map.getSource('light_points').setData(this.props.points_geoJson)
-        }
+        // if(!!this.props.points_geoJson.features[0].properties.is_accepted) {
+        //     this.map.getSource('light_points').setData(this.props.points_geoJson)
+        // }
     }
 
     render() {

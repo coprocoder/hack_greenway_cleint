@@ -13,6 +13,7 @@ import Map from './Map'
 import { 
     GetServerPoints,
     GetGeocoderData,
+    GetGeocoderDataNominatim,
     GetRoute,
     GetCategories,
     GetCharts
@@ -31,7 +32,7 @@ class HelpMap extends Component {
     componentDidMount(){
         GetServerPoints()
             .then(resp => {
-                console.log('GetServerPoints', resp)
+                // console.log('GetServerPoints', resp)
                 this.setState({points: resp.data})  
                 GetCharts()
                     .then(resp => { console.log(resp.data); this.setState({charts: resp.data}) })      
@@ -78,12 +79,18 @@ class MapGeocoder extends Component {
     }
 
     componentDidMount(){
-        GetCategories()
-            .then(resp => this.setState({categories: resp.data}))
+        // GetCategories()
+        //     .then(resp => this.setState({categories: resp.data}))
+
+        let categories = [
+            {id: 0, name: "foot"},
+            {id: 1, name: "bike"},
+        ]
+        this.setState({categories: categories})
     }
     componentDidUpdate(){
         // console.log('geocoder addrList', this.state.addrList)
-        // console.log('state', this.state)
+        console.log('state', this.state)
     }
 
     handleSubmit(e) {
@@ -101,7 +108,7 @@ class MapGeocoder extends Component {
         let req_data = {
             point_from: [this.state.selectedAddrBegin.point.lng, this.state.selectedAddrBegin.point.lat], 
             point_to: [this.state.selectedAddrEnd.point.lng, this.state.selectedAddrEnd.point.lat], 
-            user_config: Number(this.state.category)
+            profile: this.state.category
         }
         
         // отправить данные на сервер
@@ -132,7 +139,7 @@ class MapGeocoder extends Component {
         // console.log('getSelectAddrList', value)
         return new Promise((resolve, reject) => GetGeocoderData(value)
             .then(resp => {
-                console.log('geodata', resp)
+                // console.log('geodata', resp)
                 let items = []
                 resp.data.hits.map( (res, i) => { 
                     // if(res.city == "Krasnoyarsk") {
@@ -144,7 +151,7 @@ class MapGeocoder extends Component {
                         text = res.house_number ? text + res.house_number + ', ' : text 
                         // text = res.housenumber ? text + res.housenumber  : text 
                         text = res.name ? text + res.name : text 
-                        console.log('item text', text)
+                        // console.log('item text', text)
                         
                         items.push(Object.assign({}, res, { id: i, value: text, label: text }))
                         // console.log('items', items)
@@ -154,6 +161,31 @@ class MapGeocoder extends Component {
                 resolve(items)
             })
         )
+    }
+
+    getSelectAddrListNominatim = (value) => {
+        // console.log('getSelectAddrList', value)
+        let time_inter = value
+        setTimeout((time_inter)=>{
+            console.log(time_inter, value)
+            return new Promise((resolve, reject) => GetGeocoderDataNominatim(value)
+                .then(resp => {
+                    console.log('nominatim resp', resp)
+                    let items = []
+                    resp.data.map( (res, i) => { 
+                        console.log('item text', res)
+                        let text=''
+                        text = res.address.city ? text + res.address.city + ', ' : text 
+                        text = res.address.road ? text + res.address.road + ', ' : text 
+                        text = res.address.house_number ? text + res.address.house_number + ', ' : text 
+
+                        items.push(Object.assign({}, res, { id: i, value: text, label: text }))
+                    })
+                    // this.setState({ addrList: items })
+                    resolve([])
+                })
+            )
+        }, 1000)
     }
 
     selectCategory(e){
@@ -166,13 +198,16 @@ class MapGeocoder extends Component {
     }
 
     render(){
-        console.log('geocoder addrList', this.state.addrList)
+        // console.log('geocoder addrList', this.state.addrList)
         // alert(this.state.addrList)
 
         let categories = this.state.categories.map((item) => {
             return <label key={item.id}>
-                        <input name="category" type="radio" value={item.id} onChange={e => this.selectCategory(e)}
-                        />{item.name}
+                        <input 
+                            name="category" type="radio" 
+                            value={item.name} onChange={e => this.selectCategory(e)}
+                        />
+                        {item.name}
                     </label>
         })
 
@@ -205,7 +240,15 @@ class MapGeocoder extends Component {
                                 onChange={item => this.setState({selectedAddrEnd: item})}
                                 isClearable
                             />
-                            {/* {categories} */}
+                            {/* <AsyncSelect
+                                cacheOptions
+                                defaultOptions
+                                loadOptions={this.getSelectAddrListNominatim}
+                                onInputChange={this.getSelectAddrListNominatim}
+                                // onChange={item => this.setState({selectedAddrEnd: item})}
+                                isClearable
+                            /> */}
+                            {categories}
                             <input type="submit" 
                                 className="helpMap-geocoder-field" 
                                 value="Построить машрут"
