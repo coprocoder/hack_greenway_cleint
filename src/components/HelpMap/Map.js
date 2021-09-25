@@ -1,6 +1,7 @@
 import React from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { ThreeSixtySharp } from '@material-ui/icons';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibnpheWNldiIsImEiOiJjazhudXZnaGMwMmIzM2RvM2N3MDl2dmNwIn0.cNCktRFle2xX3PsaB-l0MQ';
 
@@ -53,63 +54,23 @@ class Map extends React.PureComponent {
         this.map.on('load', () => {
             // console.log('features', this.props.points_geoJson)
 
-            // Светофоры на карте
-            this.map.addSource('light_points', {
-                type: 'geojson',
-                data: this.props.points_geoJson
-            })
-            this.map.addLayer({
-                id: 'light_points',
-                type: 'circle',
-                source: 'light_points',
-                paint: {
-                    'circle-radius': 4,
-                    'circle-color': [
-                        "case",
-                        ['==', ['get', "is_accepted"], true], "#33FFB0",
-                        ['==', ['get', "is_accepted"], false], "#FC8C7F",
-                        '#6f66a6'
-                    ],
-      
-                }
-            })
-
-            // Маршрут на карте
-            this.map.addSource('route_path', {
-                type: 'geojson',
-                data: this.props.route_geoJson ? 
-                    this.props.route_geoJson.route :  // Путь
-                    { "type": "FeatureCollection", "features": [] } // Заглушка
-            })
-
-            this.map.addLayer({
-                id: 'route_path',
-                type: 'line',
-                source: 'route_path',
-                paint: {
-                    // 'line-color': '#6f66a6',
-                    'line-color': '#06450B',
-                    'line-width': 4
-                }
-            })
+            this.addSources()
+            this.addDetectorLayer()
+            this.addRouteLayer()
+            this.addHeatMapLayer()
 
             // Координаты
-            this.map.on('mousemove', (e) => {
-                // document.getElementById('map-coordinates').innerHTML =
-                //     e.lngLat.lng.toFixed(4) + ' ' + e.lngLat.lat.toFixed(4);
-            });
+            // this.map.on('mousemove', (e) => {
+            //     document.getElementById('map-coordinates').innerHTML =
+            //         e.lngLat.lng.toFixed(4) + ' ' + e.lngLat.lat.toFixed(4);
+            // });
         })
 
         // === Маркеры на поинтах === 
         let areaPopup
-        this.map.on('mouseenter', 'light_points', (e) => {
+        this.map.on('mouseenter', 'detector_points', (e) => {
             // console.log('mouseenter', e.features)
-            let characteristics = e.features[0].properties.characteristics.replace('[', '').replace(']', '').split(',')
-            characteristics = characteristics.map((ch_id, index) => {
-                let ch = this.props.charts.filter(chart => chart.id == ch_id)[0]
-                if (ch)
-                    return `<li>${ch.name}</li>`
-            })
+            let value = `<li>Value: ${e.features[0].properties.value}</li>` 
 
             if (!!areaPopup == true)
                 areaPopup.remove()
@@ -118,10 +79,10 @@ class Map extends React.PureComponent {
                 closeButton: false
             })
                 .setLngLat(e.lngLat)
-                .setHTML(`<ul>${characteristics}</ul>`)
+                .setHTML(`<ul>${value}</ul>`)
                 .addTo(this.map);
         })
-        this.map.on('mouseleave', 'light_points', (e) => {
+        this.map.on('mouseleave', 'detector_points', (e) => {
             if (!!areaPopup == true)
                 areaPopup.remove()
         })
@@ -132,9 +93,155 @@ class Map extends React.PureComponent {
         if(this.props.route_geoJson) {
             this.map.getSource('route_path').setData(this.props.route_geoJson.route)
         }
-        // if(!!this.props.points_geoJson.features[0].properties.is_accepted) {
-        //     this.map.getSource('light_points').setData(this.props.points_geoJson)
-        // }
+    }
+
+    addSources(){
+        console.log('addSources', this.map)
+        // Датчики на карте
+        this.map.addSource('detector_points', {
+            type: 'geojson',
+            data: this.props.points_geoJson
+        })
+
+        // Маршрут на карте
+        this.map.addSource('route_path', {
+            type: 'geojson',
+            data: this.props.route_geoJson ? 
+                this.props.route_geoJson.route :  // Путь
+                { "type": "FeatureCollection", "features": [] } // Заглушка
+        })
+        return this.map
+    }
+    addRouteLayer(){
+        console.log('addRouteLayer', this.map)
+        this.map.addLayer({
+            id: 'route_path',
+            type: 'line',
+            source: 'route_path',
+            paint: {
+                // 'line-color': '#6f66a6',
+                'line-color': '#06450B',
+                'line-width': 4
+            }
+        })
+    }
+    addDetectorLayer(){
+        console.log('addDetectorLayer', this.map)
+        this.map.addLayer({
+            id: 'detector_points',
+            type: 'circle',
+            source: 'detector_points',
+            minzoom: 15,
+            paint: {
+                'circle-radius': 4,
+                'circle-color': '#6f66a6'
+                // 'circle-color': [
+                //     "case",
+                //     ['==', ['get', "value"], true], "#33FFB0",
+                //     ['==', ['get', "value"], false], "#FC8C7F",
+                //     '#6f66a6'
+                // ],
+  
+            }
+        })
+    }
+    addHeatMapLayer(){
+        console.log('addHeatMapLayer', this.map)
+        this.map.addLayer({
+            'id': 'detector_heat',
+            'type': 'heatmap',
+            'source': 'detector_points',
+            'maxzoom': 15,
+            'paint': {
+                // Increase the heatmap weight based on frequency and property magnitude
+                'heatmap-weight': {
+                    property: 'value',
+                    type: 'exponential',
+                    stops: [
+                      [0, 0],
+                      [1, 1]
+                    ]
+                },
+
+                // Increase the heatmap color weight weight by zoom level
+                // heatmap-intensity is a multiplier on top of heatmap-weight
+                'heatmap-intensity': {
+                    stops: [
+                      [9, 1],
+                      [15, 3]
+                    ]
+                },
+
+                // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                // Begin color ramp at 0-stop with a 0-transparancy color
+                // to create a blur-like effect.
+                'heatmap-color': [
+                    'interpolate',
+                    ['linear'], ['heatmap-density'],
+                    0,      'rgba(0,255,0,0)',
+                    0.1,    'rgba(0,255,0,0.8)',
+                    0.5,    'rgb(255,255,0)',
+                    1,      'rgb(255,0,0)'
+                ],
+
+                // Adjust the heatmap radius by zoom level
+                'heatmap-radius': {
+                    stops: [
+                      [9, 15],
+                      [15, 100],
+                    ]
+                  },
+
+                // Transition from heatmap to circle layer by zoom level
+                'heatmap-opacity': {
+                    default: 1,
+                    stops: [
+                      [9, 1],
+                      [16, 0]
+                    ]
+                },
+            }
+        },'waterway-label');
+
+        this.map.addLayer({
+            'id': 'detector_circle',
+            'type': 'circle',
+            'source': 'detector_points',
+            'minzoom': 15,
+            'paint': {
+                // Size circle radius by earthquake magnitude and zoom level
+                'circle-radius': {
+                    property: 'value',
+                    type: 'exponential',
+                    stops: [
+                        [{ zoom: 9, value: 0 }, 5],
+                        [{ zoom: 9, value: 1 }, 10],
+                        [{ zoom: 15, value: 0 }, 20],
+                        [{ zoom: 15, value: 1 }, 50]
+                    ]
+                },
+
+                // Color circle 
+                'circle-color': {
+                    property: 'value',
+                    type: 'exponential',
+                    stops: [
+                      [0, 'green'],
+                      [0.5, 'yellow'],
+                      [1, 'red']
+                    ]
+                },
+
+                'circle-stroke-color': 'white',
+                'circle-stroke-width': 1,
+                'circle-opacity': {
+                  stops: [
+                    [15, 0.2],
+                    [22, 1]
+                  ]
+                }
+            }
+        }, 'waterway-label');
     }
 
     render() {

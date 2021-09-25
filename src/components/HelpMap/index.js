@@ -13,10 +13,10 @@ import Map from './Map'
 import { 
     GetServerPoints,
     GetGeocoderData,
-    GetGeocoderDataNominatim,
+    // GetGeocoderDataNominatim,
     GetRoute,
     GetCategories,
-    GetCharts
+    // GetCharts
 } from '../../db/repository'
 
 
@@ -32,10 +32,10 @@ class HelpMap extends Component {
     componentDidMount(){
         GetServerPoints()
             .then(resp => {
-                // console.log('GetServerPoints', resp)
+                console.log('GetServerPoints', resp)
                 this.setState({points: resp.data})  
-                GetCharts()
-                    .then(resp => { console.log(resp.data); this.setState({charts: resp.data}) })      
+                // GetCharts()
+                    // .then(resp => { console.log(resp.data); this.setState({charts: resp.data}) })      
             })
     }
 
@@ -50,6 +50,14 @@ class HelpMap extends Component {
             })
     }
 
+    setMapOpt(lng, lat, zoom){
+        this.setState({
+            lng: lng,
+            lat: lat,
+            zoom: zoom
+        })
+    }
+
     render(){
         // console.log('this.state.points', this.state.points)
         return(
@@ -57,11 +65,13 @@ class HelpMap extends Component {
                 <Map 
                     points_geoJson = {this.state.points}
                     route_geoJson = {this.state.route}
-                    charts = {this.state.charts}
+                    // charts = {this.state.charts}
+                    // setMapOpt = {this.setMapOpt}
                 />
                 <MapGeocoder 
                     changeCat={this.changeCat}
                     setRoute={this.setRoute}
+                    // mapOpt = {this.state}
                 />
                 {this.state.route ? <MapNavigator path={this.state.route.instructions}/> : null}
             </div>
@@ -90,7 +100,7 @@ class MapGeocoder extends Component {
     }
     componentDidUpdate(){
         // console.log('geocoder addrList', this.state.addrList)
-        console.log('state', this.state)
+        // console.log('state', this.state)
     }
 
     handleSubmit(e) {
@@ -137,12 +147,12 @@ class MapGeocoder extends Component {
 
     getSelectAddrList = (value) => {
         // console.log('getSelectAddrList', value)
-        return new Promise((resolve, reject) => GetGeocoderData(value)
+        return new Promise((resolve, reject) => GetGeocoderData(value, this.props.mapOpt)
             .then(resp => {
                 // console.log('geodata', resp)
                 let items = []
                 resp.data.hits.map( (res, i) => { 
-                    // if(res.city == "Krasnoyarsk") {
+                    // if(res.city == "Moscow" || res.city == "Москва") {
                         let text = ''
                         // text = res.postcode ? text + res.postcode + ', ' : text
                         // text = res.state ? text + res.state + ', ' : text
@@ -161,31 +171,6 @@ class MapGeocoder extends Component {
                 resolve(items)
             })
         )
-    }
-
-    getSelectAddrListNominatim = (value) => {
-        // console.log('getSelectAddrList', value)
-        let time_inter = value
-        setTimeout((time_inter)=>{
-            console.log(time_inter, value)
-            return new Promise((resolve, reject) => GetGeocoderDataNominatim(value)
-                .then(resp => {
-                    console.log('nominatim resp', resp)
-                    let items = []
-                    resp.data.map( (res, i) => { 
-                        console.log('item text', res)
-                        let text=''
-                        text = res.address.city ? text + res.address.city + ', ' : text 
-                        text = res.address.road ? text + res.address.road + ', ' : text 
-                        text = res.address.house_number ? text + res.address.house_number + ', ' : text 
-
-                        items.push(Object.assign({}, res, { id: i, value: text, label: text }))
-                    })
-                    // this.setState({ addrList: items })
-                    resolve([])
-                })
-            )
-        }, 1000)
     }
 
     selectCategory(e){
@@ -244,7 +229,7 @@ class MapGeocoder extends Component {
                                 cacheOptions
                                 defaultOptions
                                 loadOptions={this.getSelectAddrListNominatim}
-                                onInputChange={this.getSelectAddrListNominatim}
+                                onInputChange={(value) =>this.getSelectAddrListNominatim(value, Date.now())}
                                 // onChange={item => this.setState({selectedAddrEnd: item})}
                                 isClearable
                             /> */}
