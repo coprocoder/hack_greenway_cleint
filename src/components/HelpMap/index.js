@@ -20,6 +20,9 @@ import {
 } from '../../db/repository'
 
 
+import Spinner    from '../../images/error/spinner.gif'
+
+
 import './map.scss'
 import mapboxgl from 'mapbox-gl';
 
@@ -104,10 +107,11 @@ class HelpMap extends Component {
                     changeCat={this.changeCat}
                     setRoute={this.setRoute}
                     mapOpt = {this.state.mapOpt}
+                    route={this.state.route}
                     onChangeStartPoint = {this.onChangeStartPoint}
                     onChangeFinishPoint = {this.onChangeFinishPoint}
                 />
-                {this.state.route ? <MapNavigator path={this.state.route.instructions}/> : null}
+                {/* {this.state.route ? <MapNavigator path={this.state.route.instructions}/> : null} */}
             </div>
         )
     }
@@ -159,6 +163,8 @@ class MapGeocoder extends Component {
             point_to: [this.state.selectedAddrEnd.point.lng, this.state.selectedAddrEnd.point.lat], 
             profile: this.state.category
         }
+
+        this.setState({waited:true})
         
         // отправить данные на сервер
         GetRoute(req_data)
@@ -166,7 +172,8 @@ class MapGeocoder extends Component {
             .then(resp => {
                 // отобразить на карте
                 console.log('GetRoute resp', resp)
-                let info = resp.data.paths[0]
+                // let info = resp.data.paths[0]
+                let info = resp.data.paths
                 this.props.setRoute({
                     route: {
                         "type": "FeatureCollection",
@@ -181,6 +188,7 @@ class MapGeocoder extends Component {
                     time: info.time,
                     instructions: info.instructions
                 })
+                this.setState({waited:false})
             })
     }
 
@@ -240,58 +248,58 @@ class MapGeocoder extends Component {
         })
 
         return(
-
-            <div className="helpMap-geocoder">
-                { this.state.hidden ? 
-                    <div className="helpMap-geocoder-hidden">
-                        <button onClick={this.toggleViewMode}><FontAwesomeIcon icon={faExpandAlt} /></button>
-                    </div> :
-                    <div className="helpMap-geocoder-visible">
-                        <div className="helpMap-geocoder-header">
-                            <button onClick={this.toggleViewMode}><FontAwesomeIcon icon={faCompressAlt} /></button>
-                            <label>Поиск мест</label>
-                        </div>
-                        <form className="helpMap-geocoder-form" onSubmit={(e) => this.handleSubmit(e)}>             
-                            <div className="helpMap-geocoder-inputWrapper">
-                                <div className="helpMap-geocoder-inputColor" style={{backgroundColor: this.state.selectedAddrBegin ? "red" : "transparent"}} />
-                                <AsyncSelect
-                                    cacheOptions
-                                    defaultOptions
-                                    loadOptions={this.getSelectAddrList}
-                                    onInputChange={this.getSelectAddrList}
-                                    onChange={item => this.setState({selectedAddrBegin: item})}
-                                    isClearable
-                                />
+            <div className="helpMap-geocoder-wrapper">
+                <div className="helpMap-geocoder" style={{height: this.props.route? "inherit" : ""}}>
+                    { this.state.hidden ? 
+                        <div className="helpMap-geocoder-hidden">
+                            <button onClick={this.toggleViewMode}><FontAwesomeIcon icon={faExpandAlt} /></button>
+                        </div> : 
+                        
+                        this.state.waited ? 
+                            <div className="helpMap-geocoder-waited">
+                                <img className='helpMap-geocoder-waitedIcon' src={Spinner} alt=''/>
+                            </div> 
+                            : 
+                            <div className="helpMap-geocoder-visible" >
+                                <div className="helpMap-geocoder-header">
+                                    <button onClick={this.toggleViewMode}><FontAwesomeIcon icon={faCompressAlt} /></button>
+                                    <label>Поиск мест</label>
+                                </div>
+                                <form className="helpMap-geocoder-form" onSubmit={(e) => this.handleSubmit(e)}>             
+                                    <div className="helpMap-geocoder-inputWrapper">
+                                        <div className="helpMap-geocoder-inputColor" style={{backgroundColor: this.state.selectedAddrBegin ? "red" : "transparent"}} />
+                                        <AsyncSelect
+                                            cacheOptions
+                                            defaultOptions
+                                            loadOptions={this.getSelectAddrList}
+                                            onInputChange={this.getSelectAddrList}
+                                            onChange={item => this.setState({selectedAddrBegin: item})}
+                                            isClearable
+                                        />
+                                    </div>
+                                    <div className="helpMap-geocoder-inputWrapper">
+                                        <div className="helpMap-geocoder-inputColor" style={{backgroundColor: this.state.selectedAddrEnd ? "blue" : "transparent"}}/>
+                                        <AsyncSelect
+                                            cacheOptions
+                                            defaultOptions
+                                            loadOptions={this.getSelectAddrList}
+                                            onInputChange={this.getSelectAddrList}
+                                            onChange={item => this.setState({selectedAddrEnd: item})}
+                                            isClearable
+                                        />
+                                    </div>
+                                    <div className="category-selector">
+                                        {categories}
+                                    </div>
+                                    <input type="submit" 
+                                        className="helpMap-geocoder-field" 
+                                        value="Построить машрут"
+                                    />
+                                </form>
+                                {this.props.route ? <MapNavigator path={this.props.route.instructions}/> : null}
                             </div>
-                            <div className="helpMap-geocoder-inputWrapper">
-                                <div className="helpMap-geocoder-inputColor" style={{backgroundColor: this.state.selectedAddrEnd ? "blue" : "transparent"}}/>
-                                <AsyncSelect
-                                    cacheOptions
-                                    defaultOptions
-                                    loadOptions={this.getSelectAddrList}
-                                    onInputChange={this.getSelectAddrList}
-                                    onChange={item => this.setState({selectedAddrEnd: item})}
-                                    isClearable
-                                />
-                            </div>
-                            {/* <AsyncSelect
-                                cacheOptions
-                                defaultOptions
-                                loadOptions={this.getSelectAddrListNominatim}
-                                onInputChange={(value) =>this.getSelectAddrListNominatim(value, Date.now())}
-                                // onChange={item => this.setState({selectedAddrEnd: item})}
-                                isClearable
-                            /> */}
-                            <div className="category-selector">
-                                {categories}
-                            </div>
-                            <input type="submit" 
-                                className="helpMap-geocoder-field" 
-                                value="Построить машрут"
-                            />
-                        </form>
-                    </div>
-                }
+                    }
+                </div>
             </div>
         )
     }
@@ -317,6 +325,7 @@ class MapNavigator extends Component {
                 { this.state.hidden ? 
                     <div className="helpMap-navigator-hidden">
                         <button onClick={this.toggleViewMode}><FontAwesomeIcon icon={faExpandAlt} /></button>
+                        <label>Навигатор</label>
                     </div> :
                     <div className="helpMap-navigator-visible">
                         <div className="helpMap-navigator-header">
@@ -325,16 +334,18 @@ class MapNavigator extends Component {
                         </div>
                         <div className="helpMap-navigator-listWrapper">
                             <ul className="helpMap-navigator-list">             
-                                {this.props.path.map(item => {
-                                    let list_item = <li className="helpMap-navigatorItem">
-                                        <div className="helpMap-navigatorItem-text">{item.text}</div>
-                                        <div className="helpMap-navigatorItem-info">
-                                            <div>{(item.distance / 1000).toFixed(2)} км.</div>
-                                            <div>{(item.time / 1000 / 60).toFixed(1)} мин.</div>
-                                        </div>
-                                    </li>
-                                    return list_item
-                                })}
+                                {this.props.path.length ? 
+                                    this.props.path.map(item => {
+                                        let list_item = <li className="helpMap-navigatorItem">
+                                            <div className="helpMap-navigatorItem-text">{item.text}</div>
+                                            <div className="helpMap-navigatorItem-info">
+                                                <div>{(item.distance / 1000).toFixed(2)} км.</div>
+                                                <div>{(item.time / 1000 / 60).toFixed(1)} мин.</div>
+                                            </div>
+                                        </li>
+                                        return list_item
+                                    }) : null
+                                }
                             </ul>
                         </div>
                     </div>

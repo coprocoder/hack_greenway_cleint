@@ -50,186 +50,213 @@
         }
     }
 
-    .helpMap-geocoder {
+    .helpMap-geocoder-wrapper {
         position: absolute;
         top: 10%;
         left: 12px;
-        background-color: white;
-        padding: 8px;
-        box-shadow: 0px 0px 20px 0px rgba(34, 60, 80, 0.3);
-        border-radius: 10px;
+        max-height: 80%;
+        .helpMap-geocoder {
+            background-color: white;
+            padding: 8px;
+            box-shadow: 0px 0px 20px 0px rgba(34, 60, 80, 0.3);
+            border-radius: 10px;
+            min-height: 40%;
 
-        .helpMap-geocoder-visible {
-            .helpMap-geocoder-header {
-                height: 30px;
-                display: flex;
-                font-weight: bold;
-                align-items: center;
-                justify-content: center;
-                button {
-                    position: absolute;
-                    left: 8px;          
-                    padding: 5px 10px;
-                    height: 30px;
-                    background-color: inherit;
-                    color: black;      
-                }
-                label {
-
+            .helpMap-geocoder-waited {
+                position: relative;
+                height: 40vh;
+                width: 40vh;
+                img{
+                    height: 100%;
                 }
             }
-            .helpMap-geocoder-form {
-                display: flex;
-                flex-flow: column;
-                border-radius: 5px;
-                min-width: 250px;
-                max-width: 300px;
-                padding: 10px;
-                &>*{
-                    margin-top: 8px;
-                }
-                .helpMap-geocoder-inputWrapper{
+            .helpMap-geocoder-visible {
+                .helpMap-geocoder-header {
+                    height: 30px;
                     display: flex;
+                    font-weight: bold;
                     align-items: center;
-                    position: relative;
-                    .helpMap-geocoder-inputColor  {
-                        height: 10px;
-                        width: 10px;
-                        border-radius: 50%;
+                    justify-content: center;
+                    button {
                         position: absolute;
-                        left: 10px;
-                        z-index: 1;
+                        left: 8px;          
+                        padding: 5px 10px;
+                        height: 30px;
+                        background-color: inherit;
+                        color: black;      
                     }
-                    .helpMap-geocoder-inputStartColor {
-                        background-color: red;
+                    label {
+
                     }
-                    .helpMap-geocoder-inputEndColor {
-                        background-color: blue;
+                }
+                .helpMap-geocoder-form {
+                    display: flex;
+                    flex-flow: column;
+                    border-radius: 5px;
+                    min-width: 250px;
+                    // max-width: 300px;
+                    padding: 10px;
+                    &>*{
+                        margin-top: 8px;
                     }
-                    &>:nth-child(2) {
-                        width: 100%;
-                        &>:nth-child(2) {
-                            padding-left: 15px;
+                    .helpMap-geocoder-inputWrapper{
+                        display: flex;
+                        align-items: center;
+                        position: relative;
+                        .helpMap-geocoder-inputColor  {
+                            height: 10px;
+                            width: 10px;
+                            border-radius: 50%;
+                            position: absolute;
+                            left: 10px;
+                            z-index: 1;
                         }
-                    }
-                    &:focus(){
                         .helpMap-geocoder-inputStartColor {
-                            background-color: transparent;
+                            background-color: red;
                         }
                         .helpMap-geocoder-inputEndColor {
-                            background-color: transparent;
+                            background-color: blue;
+                        }
+                        &>:nth-child(2) {
+                            width: 100%;
+                            &>:nth-child(2) {
+                                padding-left: 15px;
+                            }
+                        }
+                        &:focus(){
+                            .helpMap-geocoder-inputStartColor {
+                                background-color: transparent;
+                            }
+                            .helpMap-geocoder-inputEndColor {
+                                background-color: transparent;
+                            }
                         }
                     }
-                }
-                .category-selector{
-                    display: flex;
-                    border-radius: 8px;
-                    overflow: hidden;
-                    border-color: lightgray;
-                    border-width: 1px;
-                    border-style: solid;
-                    &>*{
-                        flex: 1;
-                        width: 100%;
+                    .category-selector{
                         display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        padding: 8px;
-                        cursor: pointer;
+                        border-radius: 8px;
+                        overflow: hidden;
+                        border-color: lightgray;
+                        border-width: 1px;
+                        border-style: solid;
                         &>*{
-                            margin: 0 8px;
+                            flex: 1;
+                            width: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            padding: 8px;
+                            cursor: pointer;
+                            &>*{
+                                margin: 0 8px;
+                            }
+                            &.active{
+                                background-color: #0180EA;
+                                color: white;
+                            }
                         }
-                        &.active{
-                            background-color: #0180EA;
-                            color: white;
+                    }
+                    .helpMap-geocoder-field {
+                        border-radius: 5px;
+                        outline: none;
+                        background-color: #0180EA;
+                        color: white;
+                        border: none;
+                        margin: 10px 0;
+                        font-size: 1.1em;
+                        padding: 8px;
+                    }
+                }
+            }
+            .helpMap-geocoder-hidden {
+                button {
+                    padding: 5px 10px;
+                    color: black;
+                    background-color: cadetblue;
+                }
+                
+            }
+
+        }
+
+        .helpMap-navigator {
+            // position: absolute;
+            // bottom: 30px;
+            // left: 12px;
+            // background-color: white;
+            // padding: 12px;
+            // box-shadow: 0px 0px 20px 0px rgba(34, 60, 80, 0.3);
+            // border-radius: 10px;
+            height: calc(60% - 50px);
+            
+
+            .helpMap-navigator-visible {
+                // height: 100%;
+                /* position: relative; */
+                /* display: flex; */
+                // flex-direction: column;
+                /* place-items: center;*/
+                height: 35vh;
+
+                .helpMap-navigator-header {
+                    height: 30px;
+                    display: flex;
+                    font-weight: bold;
+                    align-items: center;
+                    justify-content: center;
+                    button {
+                        position: absolute;
+                        left: 8px;          
+                        padding: 5px 10px;
+                        height: 30px;
+                        background-color: inherit;
+                        color: black;      
+                    }
+                    label {
+
+                    }
+                }
+                .helpMap-navigator-listWrapper {
+                    position: absolute;
+                    overflow-y: scroll;
+                    height: 40%;
+                    .helpMap-navigator-list {
+                        overflow: overlay;
+                        list-style: none;
+                        padding: 0 10px;
+
+                        .helpMap-navigatorItem{
+                            display: flex;
+                            justify-content: space-between;
+                            border-top: 1px solid lightgray;
+                            padding: 8px 0;
+                            .helpMap-navigatorItem-text {
+
+                            }
+                            .helpMap-navigatorItem-info {
+
+                            }
                         }
                     }
                 }
-                .helpMap-geocoder-field {
-                    border-radius: 5px;
-                    outline: none;
-                    background-color: #0180EA;
-                    color: white;
-                    border: none;
-                    margin: 10px 0;
-                    font-size: 1.1em;
-                    padding: 8px;
-                }
             }
-        }
-        .helpMap-geocoder-hidden {
-            button {
-                padding: 5px 10px;
-                color: black;
-                background-color: cadetblue;
-            }
-            
-        }
-
-    }
-
-    .helpMap-navigator {
-        position: absolute;
-        bottom: 30px;
-        left: 12px;
-        background-color: white;
-        padding: 12px;
-        box-shadow: 0px 0px 20px 0px rgba(34, 60, 80, 0.3);
-        border-radius: 10px;
-        
-
-        .helpMap-navigator-visible {
-            height: 200px;
-            width: 350px;
-            .helpMap-navigator-header {
+            .helpMap-navigator-hidden {
                 height: 30px;
                 display: flex;
                 font-weight: bold;
                 align-items: center;
                 justify-content: center;
+            
                 button {
                     position: absolute;
-                    left: 8px;          
+                    left: 10px;
                     padding: 5px 10px;
-                    height: 30px;
-                    background-color: inherit;
-                    color: black;      
+                    color: black;
+                    background-color: cadetblue;
                 }
-                label {
-
-                }
+                
             }
-            .helpMap-navigator-listWrapper {
-                display: flex;
-                height: calc(100% - 30px);
-                .helpMap-navigator-list {
-                    overflow: overlay;
-                    list-style: none;
-                    padding: 0 10px;
 
-                    .helpMap-navigatorItem{
-                        display: flex;
-                        justify-content: space-between;
-                        border-top: 1px solid lightgray;
-                        padding: 8px 0;
-                        .helpMap-navigatorItem-text {
-
-                        }
-                        .helpMap-navigatorItem-info {
-
-                        }
-                    }
-                }
-            }
         }
-        .helpMap-navigator-hidden {
-            button {
-                padding: 5px 10px;
-                color: black;
-                background-color: cadetblue;
-            }
-            
-        }
-
     }
 }
