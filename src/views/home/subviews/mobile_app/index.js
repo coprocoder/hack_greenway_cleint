@@ -87,8 +87,9 @@ class MobileApp extends Component {
               </div>
               <div className="snack">
                 <img src={QR}/>
-                <p>You can download <a href="https://expo.dev/client" target="_blank">Expo Go</a> and scan the QR code to try 
-                <a href="https://snack.expo.dev/@n.zaycev/amused-candy" target="_blank"> Demo</a>.</p>
+                <p>
+                  Для ознакомления с <a href="https://snack.expo.dev/@n.zaycev/amused-candy" target="_blank">демо</a> вы можете скачать <a href="https://expo.dev/client" target="_blank">Expo Go</a> и отсканировать QR код.
+                </p>
               </div>
               {/* {this.state.mobile_imgs} */}
           </div>
