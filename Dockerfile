@@ -1,4 +1,4 @@
-FROM node:10-alpine as builder
+FROM node:11-alpine as builder
 WORKDIR /app
 COPY package.json /app/package.json
 RUN npm cache clean --force
