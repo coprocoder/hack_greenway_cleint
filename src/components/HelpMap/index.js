@@ -253,19 +253,16 @@ class MapGeocoder extends Component {
                     { this.state.hidden ? 
                         <div className="helpMap-geocoder-hidden">
                             <button onClick={this.toggleViewMode}><FontAwesomeIcon icon={faExpandAlt} /></button>
-                        </div> : 
-                        
-                        this.state.waited ? 
-                            <div className="helpMap-geocoder-waited">
-                                <img className='helpMap-geocoder-waitedIcon' src={Spinner} alt=''/>
-                            </div> 
-                            : 
+                        </div> :  
                             <div className="helpMap-geocoder-visible" >
                                 <div className="helpMap-geocoder-header">
                                     <button onClick={this.toggleViewMode}><FontAwesomeIcon icon={faCompressAlt} /></button>
                                     <label>Поиск мест</label>
                                 </div>
-                                <form className="helpMap-geocoder-form" onSubmit={(e) => this.handleSubmit(e)}>             
+                                <form className="helpMap-geocoder-form" 
+                                    onSubmit={(e) => this.handleSubmit(e)}
+                                    style={{opacity: this.state.waited ? 0.3 : 1}}
+                                >             
                                     <div className="helpMap-geocoder-inputWrapper">
                                         <div className="helpMap-geocoder-inputColor" style={{backgroundColor: this.state.selectedAddrBegin ? "red" : "transparent"}} />
                                         <AsyncSelect
@@ -296,7 +293,12 @@ class MapGeocoder extends Component {
                                         value="Построить машрут"
                                     />
                                 </form>
-                                {this.props.route ? <MapNavigator path={this.props.route.instructions}/> : null}
+                                {this.props.route && !this.state.waited ? <MapNavigator path={this.props.route.instructions}/> : null}
+
+                                {this.state.waited ? 
+                                    <div className="helpMap-geocoder-waited">
+                                        <img className='helpMap-geocoder-waitedIcon' src={Spinner} alt=''/>
+                                    </div> : null }
                             </div>
                     }
                 </div>

@@ -62,14 +62,6 @@
             border-radius: 10px;
             min-height: 40%;
 
-            .helpMap-geocoder-waited {
-                position: relative;
-                height: 40vh;
-                width: 40vh;
-                img{
-                    height: 100%;
-                }
-            }
             .helpMap-geocoder-visible {
                 .helpMap-geocoder-header {
                     height: 30px;
@@ -165,6 +157,16 @@
                         margin: 10px 0;
                         font-size: 1.1em;
                         padding: 8px;
+                    }
+                }
+                .helpMap-geocoder-waited {
+                    position: absolute;
+                    height: 40vh;
+                    width: 40vh;
+                    top: 0;
+                    left: 0;
+                    img{
+                        height: 100%;
                     }
                 }
             }
