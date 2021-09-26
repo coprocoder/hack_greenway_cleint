@@ -20,9 +20,13 @@ import {
 } from './texts';
 
 import Map1 from '../../images/home/Map1.png'
-// import Map2 from '../../images/home/Map2.png'
-// import Map3 from '../../images/home/Map3.png'
-// import Map4 from '../../images/home/Map4.png'
+import Map2 from '../../images/home/Map2.png'
+import Map3 from '../../images/home/Map3.png'
+import Map4 from '../../images/home/Map4.png'
+import Map5 from '../../images/home/Map5.png'
+import Map6 from '../../images/home/Map6.png'
+import Map7 from '../../images/home/Map7.png'
+import Map8 from '../../images/home/Map8.png'
 import BrowserBorder from '../../images/home/browser_border.png'
 
 import './home.scss';
@@ -101,9 +105,13 @@ class HomePlatformSelector extends Component {
   render() {
     let screen_data = [ 
       Map1, 
-      // Map2, 
-      // Map3, 
-      // Map4 
+      Map2, 
+      Map3, 
+      Map4, 
+      Map5, 
+      Map6, 
+      Map7, 
+      Map8, 
     ]
 
     return (
