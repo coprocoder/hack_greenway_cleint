@@ -1,4 +1,4 @@
-![Alt text](./src/images/home/Map1 "Optional title")
+![Alt text](/src/images/home/Map1.png "Optional title")
 
 <h4>Реализованная функциональность</h4>
 <ul>
