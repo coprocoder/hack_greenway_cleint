@@ -1,3 +1,5 @@
+![Alt text](/src/images/home/Map1 "Optional title")
+
 <h4>Реализованная функциональность</h4>
 <ul>
     <li>Поиск координат по адресу;</li>
